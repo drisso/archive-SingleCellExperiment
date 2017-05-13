@@ -1,0 +1,16 @@
+Package: SingleCellExperiment
+Version: 0.98.0
+Date: 2017-05-12
+Title: S4 Classes for Single Cell Data
+Author: Aaron Lun <alun@wehi.edu.au>
+Maintainer: Aaron Lun <alun@wehi.edu.au>
+Depends: R (>= 3.4), SummarizedExperiment
+Imports: S4Vectors, methods, BiocGenerics, utils
+Suggests: testthat, BiocStyle, knitr
+biocViews: DataRepresentation, DataImport, Infrastructure, SingleCell
+Description: Defines a S4 class for storing data from single-cell experiments.
+    This includes specialized methods to store and retrieve spike-in 
+    information, dimensionality reduction coordinates and size factors
+    for each cell, along with the usual metadata for genes and libraries.
+License: GPL-3
+VignetteBuilder: knitr
