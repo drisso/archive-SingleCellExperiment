@@ -41,7 +41,7 @@ setClass("SingleCellExperiment",
     }
     
     # Checking version.
-    if (objectVersion(object) < "0.98.2") {
+    if (objectVersion(object) < "0.98.0") {
         msg <- c(msg, "object is out of date, update with 'updateSCE(object)'")
     }
    
@@ -81,7 +81,7 @@ SingleCellExperiment <- function(..., reducedDims=SimpleList()) {
     out <- new("SingleCellExperiment", se, reducedDims=SimpleList(), 
                int_elementMetadata=DataFrame(matrix(0, nrow(se), 0)),
                int_colData=DataFrame(matrix(0, ncol(se), 0)),
-               int_metadata=list(version=packageVersion("beachmat")))
+               int_metadata=list(version=packageVersion("SingleCellExperiment")))
     reducedDims(out) <- reducedDims
     return(out)
 }

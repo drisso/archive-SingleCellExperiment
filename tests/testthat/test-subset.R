@@ -1,5 +1,5 @@
 # Checks the subsetting methods.
-# library(beachmat); library(testthat); source("test-subset.R")
+# library(SingleCellExperiment); library(testthat); source("test-subset.R")
 
 set.seed(1000)
 ncells <- 100
@@ -79,7 +79,7 @@ expect_error(sce[,"A"], "index out of bounds: A")
 # Subset replacement by row.
 sce.alt <- sce
 rownames(sce.alt) <- paste0(rownames(sce), "x")
-beachmat:::int_metadata(sce.alt)$whee <- 1
+SingleCellExperiment:::int_metadata(sce.alt)$whee <- 1
 
 scex <- sce.alt
 to <- 1:10
@@ -90,7 +90,7 @@ expect_identical(assay(scex)[to,,drop=FALSE], assay(sce)[from,,drop=FALSE])
 expect_equivalent(assay(scex)[-to,,drop=FALSE], assay(sce)[-to,,drop=FALSE])
 expect_identical(isSpike(scex)[to], isSpike(sce)[from])
 expect_identical(isSpike(scex)[-to], isSpike(sce)[-to])
-expect_identical(beachmat:::int_metadata(scex), beachmat:::int_metadata(sce))
+expect_identical(SingleCellExperiment:::int_metadata(scex), SingleCellExperiment:::int_metadata(sce))
 expect_identical(sizeFactors(scex), sizeFactors(sce))
 
 scex2 <- sce.alt
@@ -119,7 +119,7 @@ expect_identical(assay(scex)[,to,drop=FALSE], assay(sce)[,from,drop=FALSE])
 expect_equivalent(assay(scex)[,-to,drop=FALSE], assay(sce)[,-to,drop=FALSE])
 expect_identical(sizeFactors(scex)[to], sizeFactors(sce)[from])
 expect_identical(sizeFactors(scex)[-to], sizeFactors(sce)[-to])
-expect_identical(beachmat:::int_metadata(scex), beachmat:::int_metadata(sce))
+expect_identical(SingleCellExperiment:::int_metadata(scex), SingleCellExperiment:::int_metadata(sce))
 expect_identical(isSpike(scex), isSpike(sce))
 
 scex2 <- sce.alt
@@ -142,7 +142,7 @@ expect_equal(scex, scex2)
 sce.alt <- sce
 rownames(sce.alt) <- paste0(rownames(sce), "x")
 colnames(sce.alt) <- paste0(colnames(sce), "x")
-beachmat:::int_metadata(sce.alt)$whee <- 1
+SingleCellExperiment:::int_metadata(sce.alt)$whee <- 1
 
 scex <- sce.alt
 scex[] <- sce

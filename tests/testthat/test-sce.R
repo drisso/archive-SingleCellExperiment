@@ -1,5 +1,5 @@
 # Checks for proper construction and get/setting of the slots of a SingleCellExperiment.
-# library(beachmat); library(testthat)
+# library(SingleCellExperiment); library(testthat)
 
 set.seed(1000)
 ncells <- 100
@@ -61,21 +61,21 @@ expect_error(reducedDim(sce, "DM") <- "huh", "'nrow' of each element of 'reduced
 
 # Checking internals.
 sce <- SingleCellExperiment(assay=u)
-expect_identical(nrow(beachmat:::int_elementMetadata(sce)), nrow(sce))
-expect_identical(nrow(beachmat:::int_colData(sce)), ncol(sce))
-expect_identical(length(beachmat:::int_metadata(sce)), 1L)
+expect_identical(nrow(SingleCellExperiment:::int_elementMetadata(sce)), nrow(sce))
+expect_identical(nrow(SingleCellExperiment:::int_colData(sce)), ncol(sce))
+expect_identical(length(SingleCellExperiment:::int_metadata(sce)), 1L)
 
-beachmat:::int_elementMetadata(sce)$whee <- rextra
-expect_equal(rextra, beachmat:::int_elementMetadata(sce)$whee)
-beachmat:::int_elementMetadata(sce) <- DataFrame(1:5)
+SingleCellExperiment:::int_elementMetadata(sce)$whee <- rextra
+expect_equal(rextra, SingleCellExperiment:::int_elementMetadata(sce)$whee)
+SingleCellExperiment:::int_elementMetadata(sce) <- DataFrame(1:5)
 expect_error(validObject(sce), "'nrow' of internal 'rowData' not equal to 'nrow(object)'", fixed=TRUE)
 
-beachmat:::int_colData(sce)$stuff <- cextra
-expect_equal(cextra, beachmat:::int_colData(sce)$stuff)
-beachmat:::int_colData(sce) <- DataFrame(1:5)
+SingleCellExperiment:::int_colData(sce)$stuff <- cextra
+expect_equal(cextra, SingleCellExperiment:::int_colData(sce)$stuff)
+SingleCellExperiment:::int_colData(sce) <- DataFrame(1:5)
 expect_error(validObject(sce), "'nrow' of internal 'colData' not equal to 'ncol(object)'", fixed=TRUE)
 
-beachmat:::int_metadata(sce)$urg <- "I was here"
-expect_identical(beachmat:::int_metadata(sce)$urg, "I was here")
+SingleCellExperiment:::int_metadata(sce)$urg <- "I was here"
+expect_identical(SingleCellExperiment:::int_metadata(sce)$urg, "I was here")
 
 

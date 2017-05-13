@@ -1,5 +1,5 @@
 # Checks the combining methods.
-# library(beachmat); library(testthat); 
+# library(SingleCellExperiment); library(testthat); 
 
 set.seed(1000)
 ncells <- 100

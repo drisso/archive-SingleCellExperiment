@@ -1,5 +1,5 @@
 # Checks for proper functioning of the methods.
-# library(beachmat); library(testthat)
+# library(SingleCellExperiment); library(testthat)
 
 set.seed(1000)
 ncells <- 100
@@ -36,7 +36,7 @@ isSpike(sce, "SIRV") <- rownames(sce)[chosen]
 expect_identical(which(isSpike(sce, "SIRV")), sort(chosen))
 rownames(sce) <- NULL
 
-beachmat:::int_metadata(sce)$spike_names <- c("random")
+SingleCellExperiment:::int_metadata(sce)$spike_names <- c("random")
 expect_error(validObject(sce), "no field specifying rows belonging to spike-in set 'random'", fixed=TRUE)
 
 # Adding size factors.
@@ -57,5 +57,5 @@ sizeFactors(sce, "ERCC") <- NULL
 expect_identical(sizeFactors(sce, "ERCC"), NULL)
 
 # Checking package version.
-expect_identical(objectVersion(sce), packageVersion("beachmat"))
+expect_identical(objectVersion(sce), packageVersion("SingleCellExperiment"))
 

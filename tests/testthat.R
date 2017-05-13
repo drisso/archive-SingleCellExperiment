@@ -1,3 +1,3 @@
 library(testthat)
-library(beachmat)
-test_check("beachmat")
+library(SingleCellExperiment)
+test_check("SingleCellExperiment")
