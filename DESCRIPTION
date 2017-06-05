@@ -6,7 +6,7 @@ Author: Aaron Lun <alun@wehi.edu.au>
 Maintainer: Aaron Lun <alun@wehi.edu.au>
 Depends: R (>= 3.4), SummarizedExperiment
 Imports: S4Vectors, methods, BiocGenerics, utils
-Suggests: testthat, BiocStyle, knitr
+Suggests: testthat, BiocStyle, knitr, scRNAseq
 biocViews: DataRepresentation, DataImport, Infrastructure, SingleCell
 Description: Defines a S4 class for storing data from single-cell experiments.
     This includes specialized methods to store and retrieve spike-in 

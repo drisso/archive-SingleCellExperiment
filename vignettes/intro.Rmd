@@ -1,0 +1,69 @@
+---
+title: "An introduction to the SingleCellExperiment class"
+author: "Davide Risso"
+date: "Last modified: June 6, 2017; Compiled: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  BiocStyle::html_document:
+    toc: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+---
+
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{SingleCellExperiment Vignette}
+-->
+
+```{r options, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(warning=FALSE, error=FALSE, message=FALSE)
+```
+
+# Setup
+
+This vignette requires the [SingleCellExperiment](https://github.com/drisso/SingleCellExperiment) package,
+available from GitHub, and the `scRNAseq` package, available from Bioconductor.
+
+```{r install, eval=FALSE}
+BiocInstaller::biocLite("drisso/SingleCellExperiment")
+BiocInstaller::biocLite("scRNAseq")
+
+library(SingleCellExperiment)
+library(scRNAseq)
+```
+
+# The SingleCellExperiment class
+
+The `SingleCellExperiment` class is a light-weight container for single-cell 
+genomics data that extends the `SummarizedExperiment` class with the following
+additional slots and methods specific to single-cell genomics datasets.
+
+* `int_elementMetadata` 
+* `int_colData`
+* `int_metadata`
+* `reducedDims`
+
+As suggested by the `int_` prefix, the first three slots are not meant for direct
+manipulation, but rather are set by other methods. For instance, `isSpike<-` will
+set a proper column of `int_elementMetadata` and `sizeFactors<-` will set a 
+column in the `int_colData` slot.
+
+# A simple example
+
+# Design decisions and open questions
+
+In principle, all we want from the additional slot is a mechanism to protect
+some row and column data from the user direct manipulation, such that, for
+instance, only a call to `sizeFactors<-` can change the size factors.
+If there was a way to reserve a subset of columns (or column names) as "private"
+in `colData()` and `rowData()` we would not need the additional slots.
+
+For the `reducedDims` slot, things are slightly different, since one can imagine
+that different dimentionality techniques will be useful for different aspects
+of the analysis (e.g., t-SNE for visualization, PCA for pseudo-time inference,
+etc.). We see `reducedDims` as a similar slot to `assays()`.
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
