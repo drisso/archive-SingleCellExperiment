@@ -18,6 +18,14 @@ vignette: >
 knitr::opts_chunk$set(warning=FALSE, error=FALSE, message=FALSE)
 ```
 
+# Package Status
+
+|                |               |
+| -------------- | ------------- |
+| Project Status | [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip) |
+| Travis CI      | [![Build Status](https://travis-ci.org/drisso/SingleCellExperiment.svg?branch=master)](https://travis-ci.org/drisso/SingleCellExperiment) |
+| Test coverage  | [![Coverage](https://codecov.io/gh/drisso/SingleCellExperiment/branch/master/graph/badge.svg)](https://codecov.io/gh/drisso/SingleCellExperiment) |
+
 # Setup
 
 This vignette requires the [SingleCellExperiment](https://github.com/drisso/SingleCellExperiment) package,
