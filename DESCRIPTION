@@ -1,9 +1,11 @@
 Package: SingleCellExperiment
-Version: 0.98.0
+Version: 0.98.1
 Date: 2017-05-12
 Title: S4 Classes for Single Cell Data
-Author: Aaron Lun <alun@wehi.edu.au>
-Maintainer: Davide Risso <risso.davide@gmail.com>
+Authors@R: c(person("Aaron", "Lun", role=c("aut", "cph"),
+                    email="alun@wehi.edu.au"),
+             person("Davide","Risso", role=c("aut","cre", "cph"),
+                    email="risso.davide@gmail.com"))
 Depends: R (>= 3.4), SummarizedExperiment
 Imports: S4Vectors, methods, BiocGenerics, utils
 Suggests: testthat, BiocStyle, knitr, scRNAseq

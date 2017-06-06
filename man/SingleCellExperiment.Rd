@@ -1,6 +1,8 @@
 \name{SingleCellExperiment}
 \alias{SingleCellExperiment}
 \alias{SingleCellExperiment-class}
+\alias{coerce,SummarizedExperiment,SingleCellExperiment}
+
 \docType{class}
 
 \title{SingleCellExperiment class}
@@ -59,8 +61,12 @@ u <- matrix(rpois(20000, 5), ncol=ncells)
 pca <- matrix(runif(ncells*5), ncells)
 tsne <- matrix(rnorm(ncells*2), ncells)
 
-sce <- SingleCellExperiment(assay=list(counts=u, exprs=v),
+sce <- SingleCellExperiment(assays=list(counts=u, exprs=v),
     reducedDims=SimpleList(PCA=pca, tSNE=tsne))
 sce
+
+## coercion from SummarizedExperiment
+se <- SummarizedExperiment(assays=list(counts=u, exprs=v))
+as(se, "SingleCellExperiment")
 }
 
