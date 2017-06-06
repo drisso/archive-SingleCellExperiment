@@ -22,6 +22,19 @@ setMethod("reducedDim", c("SingleCellExperiment", "character"), function(x, type
     reducedDims(x)[[type]]
 })
 
+setMethod("reducedDim", c("SingleCellExperiment", "numeric"), function(x, type) {
+  reducedDims(x)[[type]]
+})
+
+setMethod("reducedDim", c("SingleCellExperiment", "missing"), function(x, type) {
+  r <- reducedDims(x)
+  if(length(r) > 0) {
+    return(r[[1]])
+  } else {
+    return(r)
+  }
+})
+
 setReplaceMethod("reducedDim", c("SingleCellExperiment", "character"), function(x, type, ..., value) {
     if (!.not_reddim_mat(value, x)) { rownames(value) <- colnames(x) }
     rd <- reducedDims(x)

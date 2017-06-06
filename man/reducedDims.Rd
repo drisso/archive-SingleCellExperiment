@@ -2,6 +2,8 @@
 
 \alias{reducedDim}
 \alias{reducedDim,SingleCellExperiment,character-method}
+\alias{reducedDim,SingleCellExperiment,numeric-method}
+\alias{reducedDim,SingleCellExperiment,missing-method}
 
 \alias{reducedDims}
 \alias{reducedDims,SingleCellExperiment-method}
@@ -17,6 +19,10 @@
 \usage{
 \S4method{reducedDim}{SingleCellExperiment,character}(x, type)
 
+\S4method{reducedDim}{SingleCellExperiment,numeric}(x, type)
+
+\S4method{reducedDim}{SingleCellExperiment,missing}(x, type)
+
 \S4method{reducedDim}{SingleCellExperiment,character}(x, type) <- value
 
 \S4method{reducedDims}{SingleCellExperiment}(x)
@@ -26,7 +32,7 @@
 
 \arguments{
 \item{x}{A SingleCellExperiment object.}
-\item{type}{A string containing the name for the dimensionality reduction results.}
+\item{type}{A string containing the name for the dimensionality reduction results or a numeric index containing the position of the desired dimenionality reduction result.}
 \item{value}{
 For \code{reducedDim<-}, a matrix (usually double-precision) of coordinates, for each cell (row) and dimension (column).
 For \code{reducedDims<-}, a named SimpleList object containing such matrices.}
