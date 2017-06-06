@@ -18,13 +18,31 @@ w <- matrix(runif(20000), ncol=ncells)
 assay(sce, "exprs") <- w
 expect_equivalent(assay(sce, "exprs"), w)
 
-# Adding metadata.
+# Adding colData and rowData
 rd <- DataFrame(stuff=runif(nrow(v)))
 cd <- DataFrame(whee=runif(ncells))
 sce <- SingleCellExperiment(u, rowData=rd, colData=cd)
 expect_equal(rd, rowData(sce))
 expect_equal(cd, colData(sce))
 
+# Coercion from SummarizedExperiment
+se <- SummarizedExperiment(u, rowData = rd, colData = cd)
+sce2 <- as(se, "SingleCellExperiment")
+expect_equal(sce, sce2)
+
+# Coercion from RangedSummarizedExperiment
+ranges <- GRanges(rep(c("chr1", "chr2"), c(50, 150)),
+                  IRanges(floor(runif(200, 1e5, 1e6)), width=100),
+                  strand=sample(c("+", "-"), 200, TRUE))
+mcols(ranges) <- rd
+
+rse <- SummarizedExperiment(u, colData = cd, rowRanges = ranges)
+sce3 <- as(rse, "SingleCellExperiment")
+expect_equal(assays(sce), assays(sce3))
+expect_equal(rowData(sce), rowData(sce3))
+expect_equal(colData(sce), colData(sce3))
+
+# Manipulating metadata
 cextra <- rnorm(ncells)
 sce$blah <- cextra
 expect_equal(cextra, colData(sce)$blah)
@@ -50,7 +68,7 @@ expect_equivalent(reducedDims(sce), combined)
 dm <- matrix(runif(ncells*2), ncells)
 reducedDim(sce, "DM") <- dm
 expect_equivalent(dm, reducedDim(sce, "DM"))
-reducedDim(sce, "DM") <- NULL 
+reducedDim(sce, "DM") <- NULL
 expect_equivalent(reducedDims(sce), combined)
 reducedDims(sce) <- SimpleList(DM=dm)
 expect_equivalent(SimpleList(DM=dm), reducedDims(sce))
@@ -77,5 +95,4 @@ expect_error(validObject(sce), "'nrow' of internal 'colData' not equal to 'ncol(
 
 SingleCellExperiment:::int_metadata(sce)$urg <- "I was here"
 expect_identical(SingleCellExperiment:::int_metadata(sce)$urg, "I was here")
-
 

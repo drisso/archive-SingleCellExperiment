@@ -36,7 +36,7 @@ library(scRNAseq)
 # The SingleCellExperiment class
 
 The `SingleCellExperiment` class is a light-weight container for single-cell 
-genomics data that extends the `SummarizedExperiment` class with the following
+genomics data that extends the `RangedSummarizedExperiment` class with the following
 additional slots and methods specific to single-cell genomics datasets.
 
 * `int_elementMetadata` 
@@ -144,8 +144,6 @@ head(reducedDim(sce_sub, "PCA")[,1:2])
 head(reducedDim(sce_sub, "TSNE")[,1:2])
 ```
 
-
-
 # Design decisions and open questions
 
 In principle, all we want from the additional slot is a mechanism to protect
@@ -158,6 +156,15 @@ For the `reducedDims` slot, things are slightly different, since one can imagine
 that different dimentionality techniques will be useful for different aspects
 of the analysis (e.g., t-SNE for visualization, PCA for pseudo-time inference,
 etc.). We see `reducedDims` as a similar slot to `assays()`.
+
+We decided to extend `RangedSummarizedExperiment` rather than `SummarizedExperiment`
+because for certain assays it will be essential to have `rowRanges()`. Even for
+RNA-seq it is sometimes useful to have `rowRanges()` and other classes, e.g.,
+`DESeqDataSet` in the `DESeq2` package.
+An alternative would have been to have two classes, `SingleCellExperiment` and
+`RangedSingleCellExperiment`, but this seems an unnecessary duplication as
+having a class with default empty rowRanges seems good enough when one does not
+need rowRanges.
 
 # Session Info
 
