@@ -26,7 +26,9 @@ available from GitHub, and the `scRNAseq` package, available from Bioconductor.
 ```{r install, eval=FALSE}
 BiocInstaller::biocLite("drisso/SingleCellExperiment")
 BiocInstaller::biocLite("scRNAseq")
+```
 
+```{r load_packages}
 library(SingleCellExperiment)
 library(scRNAseq)
 ```
@@ -47,7 +49,102 @@ manipulation, but rather are set by other methods. For instance, `isSpike<-` wil
 set a proper column of `int_elementMetadata` and `sizeFactors<-` will set a 
 column in the `int_colData` slot.
 
+## Create instances of SingleCellExperiment
+
+There are two main ways to create instances of `SingleCellExperiment`. The first
+is via the constructor.
+
+```{r construct}
+sce <- SingleCellExperiment(
+  assays = list(counts = matrix(rpois(100, lambda = 10), ncol=10, nrow=10)))
+sce
+```
+
+The second is via coercion from `SummarizedExperiment` objects.
+
+```{r coerce}
+se <- SummarizedExperiment(
+  assays = list(counts = matrix(rpois(100, lambda = 10), ncol=10, nrow=10)))
+as(se, "SingleCellExperiment")
+```
+
 # A simple example
+
+Here we use a subset of the `allen` dataset from the `scRNAseq` package to
+show a typical use of the class.
+
+The `allen` data are stored as a `SummarizedExperiment`, so we will use the
+coercion method to turn it into a `SingleCellExperiment`.
+
+```{r fluidigm}
+data(allen)
+allen
+
+sce <- as(allen, "SingleCellExperiment")
+sce
+```
+
+## Adding spike-in information
+
+One of the main additions to `SummarizedExperiment` is the ability for the user
+to add information about the spike-ins, with the method `isSpike`.
+
+```{r spikes}
+isSpike(sce, "ERCC") <- grepl("^ERCC-", rownames(sce))
+sce
+table(isSpike(sce))
+spikeNames(sce)
+```
+
+Although for the majority of cases one set of spike-ins should be enough, the
+class has the flexibility of including more than one set of spikes.
+Let us pretend that the members of the Adam gene family have beeen spiked-in as
+external genes in these data.
+
+```{r spikes2}
+isSpike(sce, "Adam") <- grepl("^Adam[0-9]", rownames(sce))
+sce
+table(isSpike(sce))
+table(isSpike(sce, "ERCC"))
+table(isSpike(sce, "Adam"))
+spikeNames(sce)
+```
+
+## Adding low-dimentional representations
+
+For simplicity and speed we work on a subset of 100 genes. To avoid
+ending up with only uninteresting genes, we extract the 100 genes with maximal 
+variance.
+
+```{r subset}
+library(magrittr)
+assay(sce) %>% log1p %>% rowVars -> vars
+names(vars) <- rownames(sce)
+vars <- sort(vars, decreasing = TRUE)
+
+sce_sub <- sce[names(vars[1:100]),]
+sce_sub
+```
+
+We then obtain the PCA and t-SNE representations of the data and add them to the
+object with the `reducedDims` method
+
+```{r pca}
+library(Rtsne)
+set.seed(5252)
+
+pca_data <- prcomp(t(log1p(assay(sce_sub))))
+tsne_data <- Rtsne(pca_data$x[,1:50], pca = FALSE)
+
+reducedDims(sce_sub) <- SimpleList(PCA=pca_data$x, TSNE=tsne_data$Y)
+sce_sub
+
+reducedDims(sce_sub)
+head(reducedDim(sce_sub, "PCA")[,1:2])
+head(reducedDim(sce_sub, "TSNE")[,1:2])
+```
+
+
 
 # Design decisions and open questions
 

@@ -8,7 +8,7 @@ Authors@R: c(person("Aaron", "Lun", role=c("aut", "cph"),
                     email="risso.davide@gmail.com"))
 Depends: R (>= 3.4), SummarizedExperiment
 Imports: S4Vectors, methods, BiocGenerics, utils
-Suggests: testthat, BiocStyle, knitr, scRNAseq
+Suggests: testthat, BiocStyle, knitr, scRNAseq, magrittr, Rtsne
 biocViews: DataRepresentation, DataImport, Infrastructure, SingleCell
 Description: Defines a S4 class for storing data from single-cell experiments.
     This includes specialized methods to store and retrieve spike-in 
