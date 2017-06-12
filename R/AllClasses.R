@@ -20,7 +20,8 @@ setClass("SingleCellExperiment",
     }
     if (length(rd)) {
         if (any(unlist(lapply(rd, .not_reddim_mat, object=object)))) {
-            msg <- c(msg, "'nrow' of each element of 'reducedDims' is not equal to 'ncol(object)'")
+            msg <- c(msg,
+                     "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'")
         }
     }
 
