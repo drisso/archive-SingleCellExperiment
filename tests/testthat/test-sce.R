@@ -74,8 +74,8 @@ reducedDims(sce) <- SimpleList(DM=dm)
 expect_equivalent(SimpleList(DM=dm), reducedDims(sce))
 
 expect_error(reducedDims(sce) <- SimpleList(dm), "'reducedDims' must be a named list", fixed=TRUE)
-expect_error(reducedDim(sce, "DM") <- dm[1:10,], "'nrow' of each element of 'reducedDims' is not equal to 'ncol(object)'", fixed=TRUE)
-expect_error(reducedDim(sce, "DM") <- "huh", "'nrow' of each element of 'reducedDims' is not equal to 'ncol(object)'", fixed=TRUE)
+expect_error(reducedDim(sce, "DM") <- dm[1:10,], "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
+expect_error(reducedDim(sce, "DM") <- "huh", "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
 
 # Checking internals.
 sce <- SingleCellExperiment(assay=u)
