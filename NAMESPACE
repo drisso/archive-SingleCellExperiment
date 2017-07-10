@@ -6,12 +6,14 @@ export(SingleCellExperiment)
 
 exportClasses(SingleCellExperiment)
 
-exportMethods(reducedDims, 
-    "reducedDims<-", 
-    reducedDim, 
+exportMethods(reducedDims,
+    "reducedDims<-",
+    reducedDim,
     "reducedDim<-",
-    isSpike, 
+    isSpike,
     "isSpike<-",
     spikeNames,
-    objectVersion
+    objectVersion,
+    colData,
+    rowData
 )

@@ -119,6 +119,24 @@ setReplaceMethod("isSpike", c("SingleCellExperiment", "character"), function(x, 
     return(x)
 })
 
+# colData / rowData
+
+setMethod("colData", "SingleCellExperiment", function(x, internal=FALSE) {
+  if(internal) {
+   cbind(callNextMethod(), int_colData(x))
+  } else {
+    callNextMethod()
+  }
+})
+
+setMethod("rowData", "SingleCellExperiment", function(x, internal=FALSE) {
+  if(internal) {
+    cbind(callNextMethod(), int_elementMetadata(x))
+  } else {
+    callNextMethod()
+  }
+})
+
 # Other useful functions.
 
 setMethod("spikeNames", "SingleCellExperiment", function(x) {
