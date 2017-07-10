@@ -129,12 +129,34 @@ setMethod("colData", "SingleCellExperiment", function(x, internal=FALSE) {
   }
 })
 
+setReplaceMethod("colData", c("SingleCellExperiment", "DataFrame"), function(x, value) {
+
+  if (any(colnames(value) %in% colnames(int_colData(x)))) {
+    cn <- colnames(value)[which(colnames(value) %in% colnames(int_colData(x)))]
+    warning("Overlapping column names (", paste(cn, collapse = ", "),
+            ") between internal and external colData.")
+  }
+
+  callNextMethod()
+})
+
 setMethod("rowData", "SingleCellExperiment", function(x, internal=FALSE) {
   if(internal) {
     cbind(callNextMethod(), int_elementMetadata(x))
   } else {
     callNextMethod()
   }
+})
+
+setReplaceMethod("rowData", c("SingleCellExperiment", "DataFrame"), function(x, value) {
+
+  if (any(colnames(value) %in% colnames(int_elementMetadata(x)))) {
+    cn <- colnames(value)[which(colnames(value) %in% colnames(int_elementMetadata(x)))]
+    warning("Overlapping column names (", paste(cn, collapse = ", "),
+            ") between internal and external rowData.")
+  }
+
+  callNextMethod()
 })
 
 # Other useful functions.
