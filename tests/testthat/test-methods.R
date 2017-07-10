@@ -28,7 +28,7 @@ expect_identical(isSpike(sce), is.spike2)
 
 chosen <- sample(nrow(v), 20) # integer setting
 isSpike(sce, "ERCC") <- chosen
-expect_identical(which(isSpike(sce, "ERCC")), sort(chosen)) 
+expect_identical(which(isSpike(sce, "ERCC")), sort(chosen))
 expect_identical(spikeNames(sce), c("SIRV", "ERCC")) # flipped
 
 rownames(sce) <- paste0("Gene", seq_len(nrow(v))) # character setting
@@ -58,4 +58,23 @@ expect_identical(sizeFactors(sce, "ERCC"), NULL)
 
 # Checking package version.
 expect_identical(objectVersion(sce), packageVersion("SingleCellExperiment"))
+
+# Checking colData and rowData
+sizeFactors(sce, "SF") <- sf1
+sizeFactors(sce, "ERCC") <- sf2
+
+random_coldata <- DataFrame(a=rnorm(ncells), b=runif(ncells, 0, 1))
+colData(sce) <- random_coldata
+expect_identical(colData(sce), random_coldata)
+expect_identical(colData(sce), colData(sce, internal=FALSE))
+expect_identical(colData(sce, internal=TRUE),
+                 cbind(colData(sce), SingleCellExperiment:::int_colData(sce)))
+
+random_rowdata <- DataFrame(a=rnorm(NROW(sce)), b=runif(NROW(sce), 0, 1))
+rowData(sce) <- random_rowdata
+expect_identical(rowData(sce), random_rowdata)
+expect_identical(rowData(sce), rowData(sce, internal=FALSE))
+expect_identical(rowData(sce, internal=TRUE),
+                 cbind(rowData(sce), SingleCellExperiment:::int_elementMetadata(sce)))
+
 

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(warning=FALSE, error=FALSE, message=FALSE)
 
 |                |               |
 | -------------- | ------------- |
-| Project Status | [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip) |
+| Project Status | [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) |
 | Travis CI      | [![Build Status](https://travis-ci.org/drisso/SingleCellExperiment.svg?branch=master)](https://travis-ci.org/drisso/SingleCellExperiment) |
 | Test coverage  | [![Coverage](https://codecov.io/gh/drisso/SingleCellExperiment/branch/master/graph/badge.svg)](https://codecov.io/gh/drisso/SingleCellExperiment) |
 
@@ -118,6 +118,44 @@ table(isSpike(sce, "Adam"))
 spikeNames(sce)
 ```
 
+## Adding size factors
+
+Similarly, one can include the computed size factors. For illustration, we simply
+compute the total number of reads as size factors, but better ways to compute 
+size factors are available (see, e.g., the [scran](https://www.bioconductor.org/packages/scran) package).
+
+```{r sizeFactors}
+sizeFactors(sce) <- colSums(assay(sce))
+head(sizeFactors(sce))
+```
+
+We can compute multiple size factors and store them in the object, by providing
+a name.
+
+```{r sizeFactors2}
+sizeFactors(sce, "ERCC") <- colSums(assay(sce)[isSpike(sce, "ERCC"),])
+head(sizeFactors(sce, "ERCC"))
+```
+
+## Retrieve `colData` and `rowData` information
+
+The `colData` and `rowData` methods can be used to retrieve the stored sample-
+and gene-level metadata. By default, spike-ins and size factors are not returned
+by such methods, as they are conceptually distinct from the rest of the metadata.
+
+```{r metadata}
+colData(sce)
+rowData(sce)
+```
+
+However, it is sometimes useful to retrieve a `DataFrame` with all the available
+metadata. This can be achieved by specifying `internal=TRUE`.
+
+```{r metadata2}
+colData(sce, internal=TRUE)
+rowData(sce, internal=TRUE)
+```
+
 ## Adding low-dimentional representations
 
 For simplicity and speed we work on a subset of 100 genes. To avoid
@@ -152,7 +190,7 @@ head(reducedDim(sce_sub, "PCA")[,1:2])
 head(reducedDim(sce_sub, "TSNE")[,1:2])
 ```
 
-# Design decisions and open questions
+# Design decisions
 
 In principle, all we want from the additional slot is a mechanism to protect
 some row and column data from the user direct manipulation, such that, for
@@ -174,10 +212,14 @@ An alternative would have been to have two classes, `SingleCellExperiment` and
 having a class with default empty rowRanges seems good enough when one does not
 need rowRanges.
 
-One open question is the scope of this package. For instance, it would be
-natural to write a `pca` and a `tsne` method for the class. Do these methods
-belong here or do we want to keep this package as light as possible with only
-the class definition?
+By design, the scope of this package is rather limited: i.e., to define the
+`SingleCellExperiment` class and some minimal getter and setter methods.
+For this reason, we leave it to developers to provide more advance methods for
+the `SingleCellExperiment` class in specialized packages that depend on this.
+For instance, it would be natural to write a `pca` and a `tsne` method for the 
+class. Similarly, we leave it to the developers of the existing single-cell
+packages to provide coercion methods from their specialized class to 
+`SingleCellExperiment`.
 
 # Session Info
 
