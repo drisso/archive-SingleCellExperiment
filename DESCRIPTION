@@ -1,5 +1,5 @@
 Package: SingleCellExperiment
-Version: 0.98.2
+Version: 0.99.0
 Title: S4 Classes for Single Cell Data
 Authors@R: c(person("Aaron", "Lun", role=c("aut", "cph"),
                     email="alun@wehi.edu.au"),
