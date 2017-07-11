@@ -77,4 +77,8 @@ expect_identical(rowData(sce), rowData(sce, internal=FALSE))
 expect_identical(rowData(sce, internal=TRUE),
                  cbind(rowData(sce), SingleCellExperiment:::int_elementMetadata(sce)))
 
+rowData(sce)$is_spike <- rnorm(NROW(sce))
+expect_warning(rowData(sce, internal=TRUE), "Overlapping column names")
 
+colData(sce)$size_factor_ERCC <- rnorm(ncells)
+expect_warning(colData(sce, internal=TRUE), "Overlapping column names")
