@@ -84,7 +84,7 @@ setReplaceMethod("sizeFactors", "SingleCellExperiment", function(object, type=NU
 setMethod("isSpike", c("SingleCellExperiment", "character"), function(x, type) {
     field <- .get_spike_field(type)
     if (!type %in% spikeNames(x)) {
-        stop(sprintf("spike-in set '%s' does not exist", type))
+        stop("spike-in set '", type, "' does not exist")
     }
     return(int_elementMetadata(x)[[field]])
 })

@@ -1,10 +1,10 @@
-.get_sf_field <- function(type) { 
+.get_sf_field <- function(type) {
     search <- "size_factor"
-    if (!is.null(type)) { 
-        if (length(type)!=1L) { 
-            stop("'type' must be a character vector of length 1") 
+    if (!is.null(type)) {
+        if (length(type)!=1L) {
+            stop("'type' must be a character vector of length 1")
         }
-        search <- paste0(search, "_", type) 
+        search <- paste0(search, "_", type)
     }
     return(search)
 }
@@ -12,10 +12,10 @@
 .spike_field <- "is_spike"
 
 .get_spike_field <- function(type, check=TRUE) {
-    if (check && length(type)!=1L) { 
-        stop("'type' must be a character vector of length 1") 
+    if (check && length(type)!=1L) {
+        stop("'type' must be a character vector of length 1")
     }
-    sprintf("%s_%s", .spike_field, type) 
+    sprintf("%s_%s", .spike_field, type)
 }
 
 .convert_subset_spike <- function(subset, .length, .names) {
@@ -26,10 +26,10 @@
 }
 
 .convert_subset_index <- function(subset, names, x) {
-    if (is.character(subset)) { 
+    if (is.character(subset)) {
         fmt <- paste0("index out of bounds: %s")
         subset <- SummarizedExperiment:::.SummarizedExperiment.charbound(subset, names, fmt)
-    } 
+    }
     return(as.vector(subset))
 }
 
@@ -37,12 +37,12 @@
     all.d <- list(...)
     all.fields <- Reduce(union, lapply(all.d, colnames))
 
-    for (d in seq_along(all.d)) { 
+    for (d in seq_along(all.d)) {
         cur.d <- all.d[[d]]
-        missing.fields <- setdiff(all.fields, colnames(cur.d)) 
+        missing.fields <- setdiff(all.fields, colnames(cur.d))
         if (length(missing.fields)) { # do not forgive; people should fix this.
             lost <- paste0(paste0("'", head(missing.fields, 3), "'"), collapse=", ")
-            stop(sprintf("DataFrame %i does not have %s", d, lost))
+            stop("DataFrame ", d, " does not have ", lost)
         }
         all.d[[d]] <- cur.d[,all.fields,drop=FALSE]
     }
@@ -60,19 +60,19 @@
         all.dims <- integer(length(all.rd))
         for (d in seq_along(all.rd)) {
             current <- all.rd[[d]][[m]]
-            if (is.null(current)) { 
-                stop(sprintf("object %i does not have '%s' in 'reducedDims'", d, m))
+            if (is.null(current)) {
+                stop("object ", d, " does not have '", m, "' in 'reducedDims'")
             }
             all.dims[d] <- ncol(current)
         }
-        
+
         # Checking consistency of dimensions between objects.
         udim <- unique(all.dims)
         if (length(udim)!=1) {
-            stop(sprintf("dimensions of '%s' are not consistent between objects"), m)
+            stop("dimensions of '", m, "' are not consistent between objects")
         }
     }
-   
+
     # Standardizing the order.
     for (d in seq_along(all.rd)) {
         all.rd[[d]] <- all.rd[[d]][all.modes]

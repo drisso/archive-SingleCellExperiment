@@ -79,7 +79,7 @@ setMethod("show", "SingleCellExperiment", .sce_show)
 
 SingleCellExperiment <- function(..., reducedDims=SimpleList()) {
     se <- SummarizedExperiment(...)
-    if(class(se) != "RangedSummarizedExperiment") {
+    if(!is(se, "RangedSummarizedExperiment")) {
       rse <- as(se, "RangedSummarizedExperiment")
       rowData(rse) <- rowData(se)
     } else {
