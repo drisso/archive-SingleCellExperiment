@@ -89,7 +89,15 @@ test_that("reduced dimension getters/setters are functioning", {
 
     reducedDims(sce) <- SimpleList()
     expect_identical(reducedDims(sce), SimpleList())
-    expect_identical(reducedDim(sce), NULL)        
+    expect_identical(reducedDim(sce), NULL)
+
+    reducedDims(sce) <- SimpleList(DM=d1)
+    expect_identical(SimpleList(DM=d1), reducedDims(sce))
+    expect_identical(d1, reducedDim(sce))
+
+    expect_error(reducedDims(sce) <- SimpleList(d1), "'reducedDims' must be a named list", fixed=TRUE)
+    expect_error(reducedDim(sce, "DM") <- d1[1:10,], "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
+    expect_error(reducedDim(sce, "DM") <- "huh", "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
 })
 
 # Checking package version.
