@@ -96,25 +96,29 @@ test_that("reduced dimension getters/setters are functioning", {
 expect_identical(objectVersion(sce), packageVersion("SingleCellExperiment"))
 
 # Checking colData and rowData
-sizeFactors(sce, "SF") <- sf1
-sizeFactors(sce, "ERCC") <- sf2
 
-random_coldata <- DataFrame(a=rnorm(ncells), b=runif(ncells, 0, 1))
-colData(sce) <- random_coldata
-expect_identical(colData(sce), random_coldata)
-expect_identical(colData(sce), colData(sce, internal=FALSE))
-expect_identical(colData(sce, internal=TRUE),
-                 cbind(colData(sce), SingleCellExperiment:::int_colData(sce)))
-
-random_rowdata <- DataFrame(a=rnorm(NROW(sce)), b=runif(NROW(sce), 0, 1))
-rowData(sce) <- random_rowdata
-expect_identical(rowData(sce), random_rowdata)
-expect_identical(rowData(sce), rowData(sce, internal=FALSE))
-expect_identical(rowData(sce, internal=TRUE),
-                 cbind(rowData(sce), SingleCellExperiment:::int_elementMetadata(sce)))
-
-rowData(sce)$is_spike <- rnorm(NROW(sce))
-expect_warning(rowData(sce, internal=TRUE), "Overlapping column names")
-
-colData(sce)$size_factor_ERCC <- rnorm(ncells)
-expect_warning(colData(sce, internal=TRUE), "Overlapping column names")
+test_that("special colData/rowData getters work", {
+    isSpike(sce, "ERCC") <- rbinom(nrow(v), 1, 0.2)==1
+    sizeFactors(sce, "SF") <- 2^rnorm(ncells)
+    sizeFactors(sce, "ERCC") <- 2^rnorm(ncells)
+    
+    random_coldata <- DataFrame(a=rnorm(ncells), b=runif(ncells, 0, 1))
+    colData(sce) <- random_coldata
+    expect_identical(colData(sce), random_coldata)
+    expect_identical(colData(sce), colData(sce, internal=FALSE))
+    expect_identical(colData(sce, internal=TRUE),
+                     cbind(colData(sce), SingleCellExperiment:::int_colData(sce)))
+    
+    random_rowdata <- DataFrame(a=rnorm(NROW(sce)), b=runif(NROW(sce), 0, 1))
+    rowData(sce) <- random_rowdata
+    expect_identical(rowData(sce), random_rowdata)
+    expect_identical(rowData(sce), rowData(sce, internal=FALSE))
+    expect_identical(rowData(sce, internal=TRUE),
+                     cbind(rowData(sce), SingleCellExperiment:::int_elementMetadata(sce)))
+    
+    rowData(sce)$is_spike <- rnorm(NROW(sce))
+    expect_warning(rowData(sce, internal=TRUE), "overlapping names in internal and external rowData")
+    
+    colData(sce)$size_factor_ERCC <- rnorm(ncells)
+    expect_warning(colData(sce, internal=TRUE), "overlapping names in internal and external colData")
+})
