@@ -59,7 +59,7 @@ Our suggested interpretation of the fields are as follows:
 \item{\code{counts}:}{Raw count data, e.g., number of reads or transcripts.}
 \item{\code{normcounts}:}{Normalized values on the same scale as the original counts.
 For example, counts divided by cell-specific size factors that are centred at unity.}
-\item{\code{logcounts}:}{Log-transformed counts.
+\item{\code{logcounts}:}{Log-transformed counts or count-like values.
 In most cases, this will be defined as log-transformed \code{normcounts}, e.g., using log base 2 and a pseudo-count of 1.}
 \item{\code{cpm}:}{Counts-per-million.
 This is the read count for each gene in each cell, divided by the library size of each cell in millions.}
@@ -82,15 +82,16 @@ Aaron Lun
 
 \examples{
 example(SingleCellExperiment, echo=FALSE) # Using the class example
-counts(sce) <- matrix(rnorm(nrow(sce)*ncol(sce)), ncol(sce))
+counts(sce) <- matrix(rnorm(nrow(sce)*ncol(sce)), ncol=ncol(sce))
 dim(counts(sce))
 
+# One possible way of computing normalized "counts"
 sf <- 2^rnorm(ncol(sce))
-sf <- sf/mean(sf) # centered size factors.
+sf <- sf/mean(sf) 
 normcounts(sce) <- t(t(counts(sce))/sf)
 dim(normcounts(sce))
 
-normcounts(sce) <- t(t(counts(sce))/sf)
+# One possible way of computing log-counts
+logcounts(sce) <- log2(normcounts(sce)+1)
 dim(normcounts(sce))
-
 }
