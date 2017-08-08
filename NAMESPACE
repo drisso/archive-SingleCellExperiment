@@ -16,5 +16,13 @@ exportMethods(reducedDims,
     spikeNames,
     objectVersion,
     colData,
-    rowData
+    rowData,
+    normcounts, 
+    "normcounts<-", 
+    logcounts, 
+    "logcounts<-", 
+    cpm, 
+    "cpm<-", 
+    tpm, 
+    "tpm<-"
 )

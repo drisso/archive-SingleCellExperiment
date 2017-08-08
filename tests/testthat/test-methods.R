@@ -101,11 +101,14 @@ test_that("reduced dimension getters/setters are functioning", {
 })
 
 # Checking package version.
-expect_identical(objectVersion(sce), packageVersion("SingleCellExperiment"))
+
+test_that("object version extraction works", {
+    expect_identical(objectVersion(sce), packageVersion("SingleCellExperiment"))
+})
 
 # Checking colData and rowData
 
-test_that("special colData/rowData getters work", {
+test_that("special colData/rowData getters/setters work", {
     isSpike(sce, "ERCC") <- rbinom(nrow(v), 1, 0.2)==1
     sizeFactors(sce, "SF") <- 2^rnorm(ncells)
     sizeFactors(sce, "ERCC") <- 2^rnorm(ncells)
@@ -129,4 +132,21 @@ test_that("special colData/rowData getters work", {
     
     colData(sce)$size_factor_ERCC <- rnorm(ncells)
     expect_warning(colData(sce, internal=TRUE), "overlapping names in internal and external colData")
+})
+
+#  Checking the assay convenience wrappers.
+
+test_that("assay getters/setters work", {
+    v2 <- matrix(runif(20000), ncol=ncells)
+    counts(sce) <- v2
+    expect_equivalent(counts(sce), v2)
+
+    v3 <- log2(v2)
+    logcounts(sce) <- v3
+    expect_equivalent(counts(sce), v2)
+    expect_equivalent(logcounts(sce), v3)
+
+    counts(sce) <- NULL
+    expect_equivalent(logcounts(sce), v3) 
+    expect_error(counts(sce), "invalid subscript") 
 })
