@@ -4,6 +4,7 @@
 \alias{reducedDim,SingleCellExperiment,character-method}
 \alias{reducedDim,SingleCellExperiment,numeric-method}
 \alias{reducedDim,SingleCellExperiment,missing-method}
+\alias{reducedDim,SingleCellExperiment,NULL-method}
 
 \alias{reducedDims}
 \alias{reducedDims,SingleCellExperiment-method}
