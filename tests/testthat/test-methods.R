@@ -69,19 +69,16 @@ test_that("reduced dimension getters/setters are functioning", {
     d2 <- matrix(rnorm(ncells), ncol=1)
 
     reducedDim(sce, "PCA") <- d1
-    expect_identical(reducedDim(sce), d1)
     expect_identical(reducedDim(sce, "PCA"), d1)
     expect_identical(reducedDims(sce), SimpleList(PCA=d1))
     expect_identical(reducedDimNames(sce), "PCA")
 
     reducedDim(sce, "tSNE") <- d2
-    expect_identical(reducedDim(sce), d1)
     expect_identical(reducedDim(sce, "tSNE"), d2)
     expect_identical(reducedDims(sce), SimpleList(PCA=d1, tSNE=d2))
     expect_identical(reducedDimNames(sce), c("PCA", "tSNE"))
 
     reducedDim(sce, "PCA") <- NULL
-    expect_identical(reducedDim(sce), d2)
     expect_identical(reducedDim(sce, "PCA"), NULL)
     expect_identical(reducedDim(sce, "tSNE"), d2)
     expect_identical(reducedDims(sce), SimpleList(tSNE=d2))
@@ -95,9 +92,36 @@ test_that("reduced dimension getters/setters are functioning", {
     expect_identical(SimpleList(DM=d1), reducedDims(sce))
     expect_identical(d1, reducedDim(sce))
 
-    expect_error(reducedDims(sce) <- SimpleList(d1), "'reducedDims' must be a named list", fixed=TRUE)
     expect_error(reducedDim(sce, "DM") <- d1[1:10,], "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
     expect_error(reducedDim(sce, "DM") <- "huh", "each element of 'reducedDims' must be a matrix with nrow equal to 'ncol(object)'", fixed=TRUE)
+    expect_error(reducedDim(sce, 5), "subscript is out of bounds")
+
+    # Repeating with numeric indices, and default extraction/assignment.
+    # This gets a bit confusing as the order changes when earlier elements are wiped out.
+
+    reducedDims(sce) <- SimpleList() # Wiping.
+    reducedDim(sce, 1) <- d1
+    expect_identical(reducedDim(sce), d1)
+    expect_identical(reducedDim(sce, 1), d1)
+    reducedDim(sce, 2) <- d2
+    expect_identical(reducedDim(sce), d1)
+    expect_identical(reducedDim(sce, 2), d2)
+    
+    reducedDim(sce, 1) <- NULL # d2 becomes the first element now.
+    expect_identical(reducedDim(sce), d2)
+    expect_identical(reducedDim(sce, 1), d2)
+    reducedDim(sce, "PCA") <- d1 # d1 is the second element.
+    expect_identical(reducedDim(sce, 1), d2)
+    expect_identical(reducedDim(sce, 2), d1)
+
+    reducedDim(sce) <- NULL # d1 now becomes the first element again.
+    expect_identical(reducedDim(sce), d1)
+    expect_identical(reducedDimNames(sce), "PCA")
+    reducedDim(sce) <- d2 # d2 now overwrites the first element.
+    expect_identical(reducedDim(sce, 1), d2)
+    expect_identical(reducedDimNames(sce), "PCA")
+
+    expect_error(reducedDim(sce, 5) <- d1, "subscript is out of bounds")
 })
 
 # Checking package version.

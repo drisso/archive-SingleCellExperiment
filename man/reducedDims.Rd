@@ -1,16 +1,13 @@
 \name{Reduced dimensions}
 
 \alias{reducedDim}
-\alias{reducedDim,SingleCellExperiment,character-method}
-\alias{reducedDim,SingleCellExperiment,numeric-method}
-\alias{reducedDim,SingleCellExperiment,missing-method}
-\alias{reducedDim,SingleCellExperiment,NULL-method}
+\alias{reducedDim,SingleCellExperiment-method}
 
 \alias{reducedDims}
 \alias{reducedDims,SingleCellExperiment-method}
 
 \alias{reducedDim<-}
-\alias{reducedDim<-,SingleCellExperiment,character-method}
+\alias{reducedDim<-,SingleCellExperiment-method}
 \alias{reducedDims<-}
 \alias{reducedDims<-,SingleCellExperiment-method}
 
@@ -21,13 +18,9 @@
 \description{Methods to get or set the dimensionality reduction results.}
 
 \usage{
-\S4method{reducedDim}{SingleCellExperiment,character}(x, type)
+\S4method{reducedDim}{SingleCellExperiment}(x, type)
 
-\S4method{reducedDim}{SingleCellExperiment,numeric}(x, type)
-
-\S4method{reducedDim}{SingleCellExperiment,missing}(x, type)
-
-\S4method{reducedDim}{SingleCellExperiment,character}(x, type) <- value
+\S4method{reducedDim}{SingleCellExperiment}(x, type) <- value
 
 \S4method{reducedDims}{SingleCellExperiment}(x)
 

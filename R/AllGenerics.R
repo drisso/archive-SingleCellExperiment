@@ -1,7 +1,7 @@
 # Getter/setters for reducedDim.
 
-setGeneric("reducedDim", function(x, type, ...) standardGeneric("reducedDim"))
-setGeneric("reducedDim<-", function(x, type, ..., value) standardGeneric("reducedDim<-"))
+setGeneric("reducedDim", function(x, ...) standardGeneric("reducedDim"))
+setGeneric("reducedDim<-", function(x, ..., value) standardGeneric("reducedDim<-"))
 setGeneric("reducedDimNames", function(x) standardGeneric("reducedDimNames"))
 
 setGeneric("reducedDims", function(x) standardGeneric("reducedDims"))

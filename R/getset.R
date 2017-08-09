@@ -22,26 +22,16 @@ setMethod("reducedDimNames", "SingleCellExperiment", function(x) {
     return(names(reducedDims(x)))          
 })
 
-for (sig in c("character", "numeric")) { 
-    setMethod("reducedDim", c("SingleCellExperiment", sig), function(x, type) {
-        reducedDims(x)[[type]]
-    })
-}
+setMethod("reducedDim", "SingleCellExperiment", function(x, type=1) {
+    r <- reducedDims(x)
+    if(length(r)==0) { return(NULL) }
+    return(r[[type]])
+})
 
-for (sig in c("missing", "NULL")) { 
-    setMethod("reducedDim", c("SingleCellExperiment", sig), function(x, type) {
-        r <- reducedDims(x)
-        if(length(r) > 0) {
-            return(r[[1]])
-        } else {
-            return(NULL)
-        }
-    })
-}
-
-setReplaceMethod("reducedDim", c("SingleCellExperiment", "character"), function(x, type, ..., value) {
+setReplaceMethod("reducedDim", "SingleCellExperiment", function(x, type=1, ..., value) {
     if (!.not_reddim_mat(value, x)) { rownames(value) <- colnames(x) }
     rd <- reducedDims(x)
+    if (is.numeric(type) && type > length(rd)+1) { stop("subscript is out of bounds") }
     rd[[type]] <- value
     int_reducedDims(x) <- rd
     validObject(x)
