@@ -25,4 +25,15 @@ setGeneric("isSpike<-", function(x, type, ..., value) standardGeneric("isSpike<-
 setGeneric("objectVersion", function(x) standardGeneric("objectVersion"))
 setGeneric("spikeNames", function(x) standardGeneric("spikeNames"))
 
+# Convenience assay getter/setters.
+
+setGeneric("normcounts", function(object, ...) standardGeneric("normcounts"))
+setGeneric("normcounts<-", function(object, ..., value) standardGeneric("normcounts<-"))
+setGeneric("logcounts", function(object, ...) standardGeneric("logcounts"))
+setGeneric("logcounts<-", function(object, ..., value) standardGeneric("logcounts<-"))
+
+setGeneric("cpm", function(object, ...) standardGeneric("cpm"))
+setGeneric("cpm<-", function(object, ..., value) standardGeneric("cpm<-"))
+setGeneric("tpm", function(object, ...) standardGeneric("tpm"))
+setGeneric("tpm<-", function(object, ..., value) standardGeneric("tpm<-"))
 
