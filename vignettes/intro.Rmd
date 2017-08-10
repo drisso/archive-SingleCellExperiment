@@ -1,6 +1,6 @@
 ---
 title: "An introduction to the SingleCellExperiment class"
-author: "Davide Risso"
+author: "Davide Risso and Aaron Lun"
 date: "Last modified: June 6, 2017; Compiled: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   BiocStyle::html_document:
@@ -77,9 +77,7 @@ se <- SummarizedExperiment(list(counts=counts))
 as(se, "SingleCellExperiment")
 ```
 
-# Available methods for the `SingleCellExperiment`
-
-## A simple example
+## Setting up a simple example
 
 Here we use a subset of the `allen` data set from the `r Biocpkg("scRNAseq")` package to demonstrate the use of the class.
 
@@ -94,6 +92,8 @@ These data are stored as a `SummarizedExperiment`, so we will first coerce it in
 sce <- as(allen, "SingleCellExperiment")
 sce
 ```
+
+# Available methods for the `SingleCellExperiment`
 
 ## Adding spike-in information
 
