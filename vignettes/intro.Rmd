@@ -217,6 +217,32 @@ dim(reducedDim(sce_sub, "PCA"))
 dim(reducedDim(sce_sub[,1:10], "PCA"))
 ```
 
+## Convenient access to named assays
+
+In the `SingleCellExperiment`, users can assign arbitrary names to entries of `assays`.
+To assist interoperability between packages, we provide some suggestions for what the names should be for particular types of data:
+
+- `counts`: Raw count data, e.g., number of reads or transcripts for a particular gene.
+- `normcounts`: Normalized values on the same scale as the original counts.
+For example, counts divided by cell-specific size factors that are centred at unity.
+- `logcounts`: Log-transformed counts or count-like values.
+In most cases, this will be defined as log-transformed `normcounts`, e.g., using log base 2 and a pseudo-count of 1.
+- `cpm`: Counts-per-million.
+This is the read count for each gene in each cell, divided by the library size of each cell in millions.
+- `tpm`: Transcripts-per-million.
+This is the number of transcripts for each gene in each cell, divided by the total number of transcripts in that cell (in millions).
+
+Each of these suggested names has an appropriate getter/setter method for convenient manipulation of the `SingleCellExperiment`.
+For example, we can take the (very specifically named) `tophat_counts` name and assign it to `counts` instead:
+
+```{r}
+counts(sce) <- assay(sce, "tophat_counts")
+sce
+dim(counts(sce))
+```
+
+This means that functions expecting count data can simply call `counts()` without worrying about package-specific naming conventions.
+
 # Design decisions
 
 ## Package scope
